@@ -4,13 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E6B8B798-0EED-4424-BFF8-C6E0A084B813}</ProjectGuid>
+    <ProjectGuid>{296F276D-3D50-4231-8198-1C090519BC70}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Hexagon.Database</RootNamespace>
-    <AssemblyName>Hexagon.Database</AssemblyName>
+    <RootNamespace>Hexagon.Database.EF</RootNamespace>
+    <AssemblyName>Hexagon.Database.EF</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -29,7 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Hexagon.Database.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\Hexagon.Database.EF.xml</DocumentationFile>
     <CodeAnalysisRuleSet>ExtendedCorrectnessRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
@@ -40,7 +42,14 @@
     <AssemblyOriginatorKeyFile>..\Hexagon.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -52,18 +61,28 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="IDatabaseCommand.cs" />
-    <Compile Include="IDatabaseQuery.cs" />
-    <Compile Include="IDatabaseRepository.cs" />
-    <Compile Include="IUnitOfWork.cs" />
+    <Compile Include="DbContextUnitOfWorkRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Hexagon.snk">
       <Link>Hexagon.snk</Link>
     </None>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Hexagon.Database\Hexagon.Database.csproj">
+      <Project>{e6b8b798-0eed-4424-bff8-c6e0a084b813}</Project>
+      <Name>Hexagon.Database</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Hexagon\Hexagon.csproj">
+      <Project>{1b4f43f1-bed2-4ee0-aa43-b068a31975eb}</Project>
+      <Name>Hexagon</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

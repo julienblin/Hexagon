@@ -31,18 +31,24 @@ namespace Hexagon.Database
         /// <summary>
         /// Adds the entity to the repository.
         /// </summary>
+        /// <typeparam name="T">
+        /// The type of entity to add.
+        /// </typeparam>
         /// <param name="entity">
         /// The entity.
         /// </param>
-        void Add(object entity);
+        void Add<T>(T entity) where T : class;
 
         /// <summary>
         /// Removes the entity from the repository.
         /// </summary>
+        /// <typeparam name="T">
+        /// The type of entity to remove.
+        /// </typeparam>
         /// <param name="entity">
         /// The entity.
         /// </param>
-        void Remove(object entity);
+        void Remove<T>(T entity) where T : class;
 
         /// <summary>
         /// Queries the repository.
