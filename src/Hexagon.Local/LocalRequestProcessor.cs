@@ -91,7 +91,20 @@ namespace Hexagon.Local
         /// <inheritdoc />
         public Task<TResponse> ProcessAsync<TResponse>(IRequest<TResponse> request) where TResponse : class, IResponse
         {
-            throw new System.NotImplementedException();
+            Guard.AgainstNull(() => request, request);
+            return Task<TResponse>.Factory.StartNew(() =>
+            {
+                try
+                {
+                    return this.ExecuteProcess(request);
+                }
+                catch (Exception ex)
+                {
+                    var message = string.Format("Error while processing {0}.", request);
+                    this.Logger.Error(ex, message);
+                    throw new HexagonException(message, ex);
+                }
+            });
         }
 
         /// <summary>
@@ -173,7 +186,8 @@ namespace Hexagon.Local
             try
             {
                 var response = Activator.CreateInstance<TResponse>();
-                request.Context.InitializeFrom(request.Context);
+                response.Context.InitializeFrom(request.Context);
+                response.Context.Headers[InternalHeaderKeys.HandlerMachineName] = Environment.MachineName;
                 return response;
             }
             catch (Exception ex)

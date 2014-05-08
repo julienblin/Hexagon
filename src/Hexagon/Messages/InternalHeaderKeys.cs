@@ -7,10 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Hexagon
+namespace Hexagon.Messages
 {
-    using Hexagon.Messages;
-
     /// <summary>
     /// Holds constants for key values that various components can use to insert values into the <see cref="IContext.Headers"/>
     /// </summary>
@@ -25,5 +23,10 @@ namespace Hexagon
         /// The local processing time in milliseconds.
         /// </summary>
         public const string LocalProcessingTime = Prefix + @"localProcessingTime";
+
+        /// <summary>
+        /// <see cref="System.Environment.MachineName"/> of the handler.
+        /// </summary>
+        public const string HandlerMachineName = Prefix + @"handlerMachineName";
     }
 }

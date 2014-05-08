@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Hexagon.Local
+namespace Hexagon
 {
     /// <summary>
     /// Defines constant values for <see cref="IRequestProcessorInterceptor"/> priorities.

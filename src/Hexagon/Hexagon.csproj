@@ -56,6 +56,7 @@
     <Compile Include="Guard.cs" />
     <Compile Include="HexagonException.cs" />
     <Compile Include="IClock.cs" />
+    <Compile Include="InterceptionPrority.cs" />
     <Compile Include="IRequestHandler.cs" />
     <Compile Include="IRequestProcessorInterceptor.cs" />
     <Compile Include="IRequestProcessorInvocation.cs" />
@@ -73,7 +74,7 @@
     <Compile Include="Messages\Command.cs" />
     <Compile Include="Messages\Query.cs" />
     <Compile Include="Messages\Request.cs" />
-    <Compile Include="InternalHeaderKeys.cs" />
+    <Compile Include="Messages\InternalHeaderKeys.cs" />
     <Compile Include="Messages\Response.cs" />
     <Compile Include="NullLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
