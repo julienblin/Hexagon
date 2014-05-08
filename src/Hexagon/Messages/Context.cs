@@ -30,23 +30,6 @@ namespace Hexagon.Messages
             this.Headers = new Dictionary<string, string>();
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Context"/> class.
-        /// Copy the <see cref="CorrelationId"/> and the <see cref="Headers"/>.
-        /// </summary>
-        /// <param name="context">
-        /// The context to copy from.
-        /// </param>
-        public Context(IContext context)
-        {
-            Guard.AgainstNull(() => context, context);
-
-            this.Id = Guid.NewGuid();
-            this.CorrelationId = context.CorrelationId;
-            this.Timestamp = DateTimeOffset.Now;
-            this.Headers = context.Headers.ToDictionary(x => x.Key, x => x.Value);
-        }
-
         /// <inheritdoc />
         public Guid Id { get; private set; }
 
@@ -58,5 +41,20 @@ namespace Hexagon.Messages
 
         /// <inheritdoc />
         public IDictionary<string, string> Headers { get; private set; }
+
+        /// <inheritdoc />
+        public void InitializeFrom(IContext context)
+        {
+            Guard.AgainstNull(() => context, context);
+
+            this.CorrelationId = context.CorrelationId;
+            this.Headers = context.Headers.ToDictionary(x => x.Key, x => x.Value);
+        }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return string.Format("{0:N} / {1:N} / {2:O} / {3}", this.Id, this.CorrelationId, this.Timestamp, string.Join(",", this.Headers.Select(x => string.Format("{0}={1}", x.Key, x.Value))));
+        }
     }
 }

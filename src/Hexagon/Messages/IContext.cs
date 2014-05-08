@@ -39,5 +39,13 @@ namespace Hexagon.Messages
         /// information about the context of a message.
         /// </summary>
         IDictionary<string, string> Headers { get; }
+
+        /// <summary>
+        /// Initializes correct values from <paramref name="context"/>.
+        /// </summary>
+        /// <param name="context">
+        /// The context to initializes from.
+        /// </param>
+        void InitializeFrom(IContext context);
     }
 }

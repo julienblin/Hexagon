@@ -58,6 +58,27 @@ namespace Hexagon
         }
 
         /// <summary>
+        /// Ensures the given <paramref name="value"/> is a <typeparamref name="T"/>.
+        /// Throws <see cref="ArgumentException"/> otherwise.
+        /// </summary>
+        /// <param name="reference">
+        /// The reference.
+        /// </param>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type to check for compatibility.
+        /// </typeparam>
+        public static void AgainstTypeIncompatibility<T>(Expression<Func<object>> reference, object value)
+        {
+            if (!(value is T))
+            {
+                throw new ArgumentException(string.Format("Parameter must be a {0}.", typeof(T)), GetParameterName(reference));
+            }
+        }
+
+        /// <summary>
         /// Gets the parameter name from the <paramref name="reference"/>.
         /// </summary>
         /// <param name="reference">

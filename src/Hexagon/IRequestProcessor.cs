@@ -30,7 +30,7 @@ namespace Hexagon
         /// <returns>
         /// The <see cref="TResponse"/>.
         /// </returns>
-        TResponse Process<TResponse>(IRequest<TResponse> request) where TResponse : IResponse;
+        TResponse Process<TResponse>(IRequest<TResponse> request) where TResponse : class, IResponse;
 
         /// <summary>
         ///  Processes the <paramref name="request"/> asynchronously.
@@ -44,6 +44,6 @@ namespace Hexagon
         /// <returns>
         /// The <see cref="Task{TResult}"/>.
         /// </returns>
-        Task<TResponse> ProcessAsync<TResponse>(IRequest<TResponse> request) where TResponse : IResponse;
+        Task<TResponse> ProcessAsync<TResponse>(IRequest<TResponse> request) where TResponse : class, IResponse;
     }
 }

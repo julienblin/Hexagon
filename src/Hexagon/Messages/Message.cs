@@ -22,21 +22,13 @@ namespace Hexagon.Messages
             this.Context = new Context();
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Message"/> class.
-        /// Copy the context from the <paramref name="message"/>.
-        /// </summary>
-        /// <param name="message">
-        /// The message to copy the context from.
-        /// </param>
-        protected Message(IMessage message)
-        {
-            Guard.AgainstNull(() => message, message);
-
-            this.Context = new Context(message.Context);
-        }
-
         /// <inheritdoc />
         public IContext Context { get; private set; }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return string.Format("{0}({1})", this.GetType().FullName, this.Context);
+        }
     }
 }

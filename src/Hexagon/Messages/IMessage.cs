@@ -9,8 +9,6 @@
 
 namespace Hexagon.Messages
 {
-    using System;
-
     /// <summary>
     /// Represents a base unit of message.
     /// </summary>

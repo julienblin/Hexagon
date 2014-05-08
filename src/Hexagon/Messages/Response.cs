@@ -1,13 +1,18 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AssemblyInfo.cs" company="Julien Blin">
+// <copyright file="Response.cs" company="Julien Blin">
 //   Copyright (c) 2014 Julien Blin
 // </copyright>
 // <summary>
-//   AssemblyInfo.cs
+//   <see cref="IResponse" /> standard abstract implementation.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Reflection;
-
-[assembly: AssemblyTitle("Hexagon.Local")]
-[assembly: AssemblyDescription("Local request processor implementation for Hexagon.")]
+namespace Hexagon.Messages
+{
+    /// <summary>
+    /// <see cref="IResponse"/> standard abstract implementation.
+    /// </summary>
+    public abstract class Response : Message, IResponse
+    {
+    }
+}

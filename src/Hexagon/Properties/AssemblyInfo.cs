@@ -8,8 +8,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Reflection;
-using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Hexagon")]
 [assembly: AssemblyDescription("Main assembly for Hexagon abstractions.")]
-[assembly: ComVisible(false)]
