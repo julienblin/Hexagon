@@ -1,15 +1,18 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AssemblyInfo.cs" company="Julien Blin">
+// <copyright file="IResponse.cs" company="Julien Blin">
 //   Copyright (c) 2014 Julien Blin
 // </copyright>
 // <summary>
-//   AssemblyInfo.cs
+//   Represents a response message.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Reflection;
-using System.Runtime.InteropServices;
-
-[assembly: AssemblyTitle("Hexagon")]
-[assembly: AssemblyDescription("Main assembly for Hexagon abstractions.")]
-[assembly: ComVisible(false)]
+namespace Hexagon.Messages
+{
+    /// <summary>
+    /// Represents a response message.
+    /// </summary>
+    public interface IResponse : IMessage
+    {
+    }
+}

@@ -1,12 +1,13 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="GlobalAssemblyInfo.cs" company="Julien Blin">
-//   Julien Blin
+//   Copyright (c) 2014 Julien Blin
 // </copyright>
 // <summary>
 //   GlobalAssemblyInfo.cs
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
 using System.Reflection;
 
 [assembly: AssemblyConfiguration("")]
@@ -18,3 +19,5 @@ using System.Reflection;
 
 [assembly: AssemblyVersion("0.1.0.0")]
 [assembly: AssemblyFileVersion("0.1.0.0")]
+
+[assembly: CLSCompliant(true)]
