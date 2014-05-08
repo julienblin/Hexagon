@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Hexagon
+namespace Hexagon.Impl
 {
     using System;
     using System.Diagnostics.CodeAnalysis;

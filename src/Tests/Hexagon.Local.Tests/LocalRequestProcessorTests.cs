@@ -11,6 +11,7 @@ namespace Hexagon.Local.Tests
 {
     using System;
 
+    using Hexagon.Impl;
     using Hexagon.Messages;
 
     using Moq;
@@ -32,7 +33,7 @@ namespace Hexagon.Local.Tests
         {
             this.typeFactoryMock = new Mock<ITypeFactory>();
             this.interceptorMock = new Mock<IRequestProcessorInterceptor>();
-            this.interceptorMock.SetupGet(x => x.InterceptionPriority).Returns(InterceptionPrority.Medium);
+            this.interceptorMock.SetupGet(x => x.InterceptionPriority).Returns(DefaultInterceptionPrority.Medium);
             this.interceptorMock.Setup(x => x.Intercept(It.IsAny<IRequestProcessorInvocation>()))
                 .Callback<IRequestProcessorInvocation>(i => i.Proceed());
             this.processor = new LocalRequestProcessor(this.typeFactoryMock.Object, new[] { this.interceptorMock.Object }) { Logger = TestConsoleLogger.Instance };

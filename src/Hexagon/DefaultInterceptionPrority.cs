@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InterceptionPrority.cs" company="Julien Blin">
+// <copyright file="DefaultInterceptionPrority.cs" company="Julien Blin">
 //   Copyright (c) 2014 Julien Blin
 // </copyright>
 // <summary>
@@ -13,7 +13,7 @@ namespace Hexagon
     /// Defines constant values for <see cref="IRequestProcessorInterceptor"/> priorities.
     /// </summary>
     /// <see cref="IRequestProcessorInterceptor.InterceptionPriority"/>
-    public static class InterceptionPrority
+    public static class DefaultInterceptionPrority
     {
         /// <summary>
         /// High priority - will run first

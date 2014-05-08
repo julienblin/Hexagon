@@ -15,7 +15,7 @@ namespace Hexagon
     public interface IRequestProcessorInterceptor
     {
         /// <summary>
-        /// Gets the priority of the interceptor execution. Please use values from <see cref="InterceptionPrority"/>.
+        /// Gets the priority of the interceptor execution. Please use values from <see cref="DefaultInterceptionPrority"/>.
         /// </summary>
         int InterceptionPriority { get; }
 

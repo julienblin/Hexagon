@@ -11,7 +11,6 @@ namespace Hexagon.Messages
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Linq;
 
     /// <summary>
