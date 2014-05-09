@@ -9,10 +9,15 @@
 
 namespace Hexagon.Database.EF.Tests
 {
+    using System.Data.Entity;
+
     using Hexagon.Database.EF.Tests.Command;
     using Hexagon.Database.EF.Tests.Entities;
     using Hexagon.Database.EF.Tests.Queries;
+    using Hexagon.Database.EF.Tests.QueryHandlers;
     using Hexagon.Impl;
+
+    using Moq;
 
     using NUnit.Framework;
     using NUnit.Framework.Constraints;
@@ -23,6 +28,14 @@ namespace Hexagon.Database.EF.Tests
     [TestFixture]
     public class DbContextUnitOfWorkRepositoryTests
     {
+        private Mock<ITypeFactory> factoryMock;
+
+        [SetUp]
+        public void SetUp()
+        {
+            this.factoryMock = new Mock<ITypeFactory>();
+        }
+
         [Test]
         public void MostOperationsShouldThrow_IfInactive()
         {
@@ -72,9 +85,61 @@ namespace Hexagon.Database.EF.Tests
             }
         }
 
+        [Test]
+        public void Execute_ShouldSelectQueryHandler_AndReturnResult()
+        {
+            var query = new Entity1Query();
+            var resultMock = new Mock<IDatabaseQueryParametrizedResult<Entity1>>();
+            var queryHandler = new Mock<IDbContextDatabaseQueryHandler<Entity1Query, IDatabaseQueryParametrizedResult<Entity1>>>();
+            queryHandler.Setup(x => x.Handle(query, It.IsNotNull<DbContext>())).Returns(resultMock.Object).Verifiable();
+            this.factoryMock.Setup(x => x.Get<IDbContextDatabaseQueryHandler>(typeof(IDbContextDatabaseQueryHandler<Entity1Query, IDatabaseQueryParametrizedResult<Entity1>>)))
+                            .Returns(queryHandler.Object)
+                            .Verifiable();
+
+            using (var context = this.CreateContext())
+            {
+                context.Start();
+                var result = context.Execute(query);
+                Assert.That(result, Is.SameAs(resultMock.Object));
+                queryHandler.Verify();
+                this.factoryMock.Verify();
+            }
+        }
+
+        [Test]
+        public void Execute_ShouldExecuteARealQueryHandler()
+        {
+            var query = new Entity1Query { ValueLike = "Something" };
+            this.factoryMock.Setup(
+                x =>
+                x.Get<IDbContextDatabaseQueryHandler>(
+                    typeof(IDbContextDatabaseQueryHandler<Entity1Query, IDatabaseQueryParametrizedResult<Entity1>>)))
+                .Returns(new Entity1QueryHandler());
+
+            using (var context = this.CreateContext())
+            {
+                context.Start();
+                Assert.That(() => context.Execute(query).List(), Throws.Nothing);
+            }
+        }
+
+        [Test]
+        public void Execute_ShouldThrowException_WhenNoQueryHandlerFound()
+        {
+            var query = new Entity1Query();
+
+            using (var context = this.CreateContext())
+            {
+                context.Start();
+                Assert.That(
+                    () => context.Execute(query),
+                    Throws.Exception.TypeOf<HexagonException>().With.Message.ContainsSubstring("appropriate handler"));
+            }
+        }
+
         private DbContextUnitOfWorkRepository CreateContext()
         {
-            return new TestDbContext { Logger = TestConsoleLogger.Instance };
+            return new TestDbContext(this.factoryMock.Object) { Logger = TestConsoleLogger.Instance };
         }
     }
 }

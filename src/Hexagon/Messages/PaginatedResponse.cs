@@ -10,6 +10,9 @@
 
 namespace Hexagon.Messages
 {
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+
     /// <summary>
     /// <see cref="IResponse"/> standard abstract implementation that 
     /// implements <see cref="IPaginationResults"/>.
@@ -24,8 +27,19 @@ namespace Hexagon.Messages
 
         /// <inheritdoc />
         public int TotalEntries { get; set; }
+    }
 
+    /// <summary>
+    /// <see cref="IResponse"/> standard abstract implementation that 
+    /// implements <see cref="IPaginationResults{T}"/>.
+    /// </summary>
+    /// <typeparam name="T">
+    /// The type of items paginated.
+    /// </typeparam>
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "OK here because it is a generic variant.")]
+    public abstract class PaginatedResponse<T> : PaginatedResponse, IPaginationResults<T>
+    {
         /// <inheritdoc />
-        public int TotalPages { get; set; }
+        public IEnumerable<T> Items { get; set; }
     }
 }

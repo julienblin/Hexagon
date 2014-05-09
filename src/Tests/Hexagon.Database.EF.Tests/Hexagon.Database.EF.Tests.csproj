@@ -71,6 +71,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\Entity1Query.cs" />
+    <Compile Include="QueryHandlers\Entity1QueryHandler.cs" />
     <Compile Include="TestDbContext.cs" />
   </ItemGroup>
   <ItemGroup>

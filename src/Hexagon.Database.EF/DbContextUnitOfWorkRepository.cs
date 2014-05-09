@@ -20,6 +20,11 @@ namespace Hexagon.Database.EF
     public class DbContextUnitOfWorkRepository : DbContext, IUnitOfWork, IDatabaseRepository
     {
         /// <summary>
+        /// The type factory.
+        /// </summary>
+        private readonly ITypeFactory factory;
+
+        /// <summary>
         /// The transaction isolation level.
         /// </summary>
         private readonly IsolationLevel transactionIsolationLevel = IsolationLevel.ReadCommitted;
@@ -44,30 +49,52 @@ namespace Hexagon.Database.EF
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DbContextUnitOfWorkRepository"/> class.
+        /// </summary>
+        /// <param name="factory">
+        /// The type factory.
+        /// </param>
+        public DbContextUnitOfWorkRepository(ITypeFactory factory)
+        {
+            Guard.AgainstNull(() => factory, factory);
+            this.factory = factory;
+            this.SetupLog();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DbContextUnitOfWorkRepository"/> class.
         /// Uses <see cref="IsolationLevel.ReadCommitted"/> for transactions.
         /// </summary>
+        /// <param name="factory">
+        /// The type factory.
+        /// </param>
         /// <param name="nameOrConnectionString">
         /// Either the database name or a connection string.
         /// </param>
-        public DbContextUnitOfWorkRepository(string nameOrConnectionString)
-            : this(nameOrConnectionString, IsolationLevel.ReadCommitted)
+        public DbContextUnitOfWorkRepository(ITypeFactory factory, string nameOrConnectionString)
+            : this(factory, nameOrConnectionString, IsolationLevel.ReadCommitted)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DbContextUnitOfWorkRepository"/> class.
         /// </summary>
+        /// <param name="factory">
+        /// The type factory.
+        /// </param>
         /// <param name="nameOrConnectionString">
         /// Either the database name or a connection string.
         /// </param>
         /// <param name="transactionIsolationLevel">
         /// The transaction isolation level.
         /// </param>
-        public DbContextUnitOfWorkRepository(string nameOrConnectionString, IsolationLevel transactionIsolationLevel)
+        public DbContextUnitOfWorkRepository(ITypeFactory factory, string nameOrConnectionString, IsolationLevel transactionIsolationLevel)
             : base(nameOrConnectionString)
         {
+            Guard.AgainstNull(() => factory, factory);
             Guard.AgainstNullOrEmpty(() => nameOrConnectionString, nameOrConnectionString);
+            this.factory = factory;
             this.transactionIsolationLevel = transactionIsolationLevel;
+            this.SetupLog();
         }
 
         /// <summary>
@@ -123,7 +150,34 @@ namespace Hexagon.Database.EF
         {
             Guard.AgainstNull(() => query, query);
             this.ThrowIfNotActive("Execute query");
-            throw new System.NotImplementedException();
+
+            var handlerType = typeof(IDbContextDatabaseQueryHandler<,>).MakeGenericType(
+                query.GetType(),
+                typeof(TResult));
+            var handler = this.factory.Get<IDbContextDatabaseQueryHandler>(handlerType);
+
+            if (handler == null)
+            {
+                throw new HexagonException(string.Format("Unable to find an appropriate handler for {0} using type definition {1}.", query, handlerType));
+            }
+
+            try
+            {
+                var result = handler.Handle(query, this);
+                if (!(result is TResult))
+                {
+                    var message =
+                        string.Format("Processing error: invalid result type for query {0}. Expected {1}, got {2}", query, typeof(TResult), result.GetType());
+                    this.Logger.Error(message);
+                    throw new HexagonException(message);
+                }
+
+                return (TResult)result;
+            }
+            finally
+            {
+                this.factory.Release(handler);
+            }
         }
 
         /// <inheritdoc />
@@ -211,6 +265,20 @@ namespace Hexagon.Database.EF
             }
 
             base.Dispose(disposing);
+        }
+
+        /// <summary>
+        /// Hooks up the entity framework SQL log.
+        /// </summary>
+        private void SetupLog()
+        {
+            this.Database.Log += log =>
+                {
+                    if (this.Logger.IsDebugEnabled)
+                    {
+                        this.Logger.Debug(log);
+                    }
+                };
         }
     }
 }

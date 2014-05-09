@@ -79,6 +79,7 @@
     <Compile Include="Messages\Command.cs" />
     <Compile Include="Messages\PaginatedRequest.cs" />
     <Compile Include="Messages\PaginatedResponse.cs" />
+    <Compile Include="Messages\PaginationResult.cs" />
     <Compile Include="Messages\Query.cs" />
     <Compile Include="Messages\Request.cs" />
     <Compile Include="Messages\InternalHeaderKeys.cs" />

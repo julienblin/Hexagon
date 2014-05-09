@@ -16,6 +16,15 @@ namespace Hexagon.Database.EF.Tests
     /// </summary>
     public class TestDbContext : DbContextUnitOfWorkRepository
     {
+        public TestDbContext()
+        {
+        }
+
+        public TestDbContext(ITypeFactory factory)
+            : base(factory)
+        {
+        }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.AddFromAssembly(typeof(TestDbContext).Assembly);

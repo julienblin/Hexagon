@@ -9,7 +9,10 @@
 
 namespace Hexagon.Database.EF.Tests.Queries
 {
-    public class Entity1Query : IDatabaseQuery<object>
+    using Hexagon.Database.EF.Tests.Entities;
+
+    public class Entity1Query : IParametrizedDatabaseQuery<Entity1>
     {
+        public string ValueLike { get; set; }
     }
 }

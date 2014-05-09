@@ -54,7 +54,9 @@
     </Compile>
     <Compile Include="IDatabaseCommand.cs" />
     <Compile Include="IDatabaseQuery.cs" />
+    <Compile Include="IDatabaseQueryParametrizedResult.cs" />
     <Compile Include="IDatabaseRepository.cs" />
+    <Compile Include="IParametrizedDatabaseQuery.cs" />
     <Compile Include="IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -62,6 +64,12 @@
     <None Include="..\Hexagon.snk">
       <Link>Hexagon.snk</Link>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Hexagon\Hexagon.csproj">
+      <Project>{1b4f43f1-bed2-4ee0-aa43-b068a31975eb}</Project>
+      <Name>Hexagon</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
