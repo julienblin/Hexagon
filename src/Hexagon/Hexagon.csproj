@@ -69,12 +69,16 @@
     <Compile Include="Messages\ICommand.cs" />
     <Compile Include="Messages\IContext.cs" />
     <Compile Include="Messages\IMessage.cs" />
+    <Compile Include="Messages\IPaginationParameters.cs" />
+    <Compile Include="Messages\IPaginationResults.cs" />
     <Compile Include="Messages\IQuery.cs" />
     <Compile Include="Messages\IRequest.cs" />
     <Compile Include="Messages\IResponse.cs" />
     <Compile Include="Messages\IValidationResults.cs" />
     <Compile Include="Messages\Message.cs" />
     <Compile Include="Messages\Command.cs" />
+    <Compile Include="Messages\PaginatedRequest.cs" />
+    <Compile Include="Messages\PaginatedResponse.cs" />
     <Compile Include="Messages\Query.cs" />
     <Compile Include="Messages\Request.cs" />
     <Compile Include="Messages\InternalHeaderKeys.cs" />
