@@ -59,8 +59,10 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Command\CommandNoResult.cs" />
-    <Compile Include="Command\CommandWithResult.cs" />
+    <Compile Include="CommandHandlers\CommandNoResultHandler.cs" />
+    <Compile Include="CommandHandlers\CommandWithResultHandler.cs" />
+    <Compile Include="Commands\CommandNoResult.cs" />
+    <Compile Include="Commands\CommandWithResult.cs" />
     <Compile Include="DbContextUnitOfWorkRepositoryTests.cs" />
     <Compile Include="Entities\Entity1.cs" />
     <Compile Include="Mappings\Entity1Map.cs" />

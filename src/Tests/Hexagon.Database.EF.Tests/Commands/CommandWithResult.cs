@@ -7,9 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Hexagon.Database.EF.Tests.Command
+namespace Hexagon.Database.EF.Tests.Commands
 {
-    public class CommandWithResult : IDatabaseCommand<object>
+    using System;
+
+    public class CommandWithResult : IDatabaseCommand<DateTime>
     {
     }
 }

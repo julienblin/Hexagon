@@ -192,7 +192,22 @@ namespace Hexagon.Database.EF
             // Flush pending changes, but since we manage the transaction it is still transactionnal.
             this.SaveChanges();
 
-            throw new System.NotImplementedException();
+            var handlerType = typeof(IDbContextDatabaseCommandHandler<>).MakeGenericType(command.GetType());
+            var handler = this.factory.Get<IDbContextDatabaseCommandHandler>(handlerType);
+
+            if (handler == null)
+            {
+                throw new HexagonException(string.Format("Unable to find an appropriate handler for {0} using type definition {1}.", command, handlerType));
+            }
+
+            try
+            {
+                handler.Handle(command, this);
+            }
+            finally
+            {
+                this.factory.Release(handler);
+            }
         }
 
         /// <inheritdoc />
@@ -204,7 +219,31 @@ namespace Hexagon.Database.EF
             // Flush pending changes, but since we manage the transaction it is still transactionnal.
             this.SaveChanges();
 
-            throw new System.NotImplementedException();
+            var handlerType = typeof(IDbContextDatabaseCommandHandler<>).MakeGenericType(command.GetType());
+            var handler = this.factory.Get<IDbContextDatabaseCommandHandler>(handlerType);
+
+            if (handler == null)
+            {
+                throw new HexagonException(string.Format("Unable to find an appropriate handler for {0} using type definition {1}.", command, handlerType));
+            }
+
+            try
+            {
+                var result = handler.Handle(command, this);
+                if (!(result is TResult))
+                {
+                    var message =
+                        string.Format("Processing error: invalid result type for command {0}. Expected {1}, got {2}", command, typeof(TResult), result.GetType());
+                    this.Logger.Error(message);
+                    throw new HexagonException(message);
+                }
+
+                return (TResult)result;
+            }
+            finally
+            {
+                this.factory.Release(handler);
+            }
         }
 
         /// <inheritdoc />

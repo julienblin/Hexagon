@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Hexagon.Database.EF.Tests.Command
+namespace Hexagon.Database.EF.Tests.Commands
 {
     public class CommandNoResult : IDatabaseCommand
     {

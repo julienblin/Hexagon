@@ -9,10 +9,12 @@
 
 namespace Hexagon.Database.EF.Tests
 {
+    using System;
     using System.Data.Entity;
     using System.Linq;
 
-    using Hexagon.Database.EF.Tests.Command;
+    using Hexagon.Database.EF.Tests.CommandHandlers;
+    using Hexagon.Database.EF.Tests.Commands;
     using Hexagon.Database.EF.Tests.Entities;
     using Hexagon.Database.EF.Tests.Queries;
     using Hexagon.Database.EF.Tests.QueryHandlers;
@@ -202,6 +204,103 @@ namespace Hexagon.Database.EF.Tests
                 Assert.That(
                     () => context.Execute(query),
                     Throws.Exception.TypeOf<HexagonException>().With.Message.ContainsSubstring("appropriate handler"));
+            }
+        }
+
+        [Test]
+        public void Execute_ShouldSelectCommandHandler_AndInvokeHandle_WithNoResult()
+        {
+            var command = new CommandNoResult();
+            var commandHandlerMock = new Mock<IDbContextDatabaseCommandHandler<CommandNoResult>>();
+            this.factoryMock.Setup(x => x.Get<IDbContextDatabaseCommandHandler>(typeof(IDbContextDatabaseCommandHandler<CommandNoResult>)))
+                            .Returns(commandHandlerMock.Object)
+                            .Verifiable();
+
+            using (var context = this.CreateContext())
+            {
+                context.Start();
+                context.Execute(command);
+                commandHandlerMock.Verify(x => x.Handle(command, It.IsNotNull<DbContext>()));
+                this.factoryMock.Verify();
+            }
+        }
+
+        [Test]
+        public void Execute_ShouldSelectCommandHandler_AndInvokeHandle_WithResult()
+        {
+            var command = new CommandWithResult();
+            var expectedResult = new DateTime();
+            var commandHandlerMock = new Mock<IDbContextDatabaseCommandHandler<CommandWithResult>>();
+            commandHandlerMock.Setup(x => x.Handle(command, It.IsNotNull<DbContext>()))
+                              .Returns(expectedResult)
+                              .Verifiable();
+            this.factoryMock.Setup(x => x.Get<IDbContextDatabaseCommandHandler>(typeof(IDbContextDatabaseCommandHandler<CommandWithResult>)))
+                            .Returns(commandHandlerMock.Object)
+                            .Verifiable();
+
+            using (var context = this.CreateContext())
+            {
+                context.Start();
+                var result = context.Execute(command);
+                Assert.That(result, Is.EqualTo(expectedResult));
+                commandHandlerMock.Verify();
+                this.factoryMock.Verify();
+            }
+        }
+
+        [Test]
+        public void Execute_ShouldThrowException_WhenNoCommandHandlerFound()
+        {
+            var commandNoResult = new CommandNoResult();
+            var commandWithResult = new CommandWithResult();
+
+            using (var context = this.CreateContext())
+            {
+                context.Start();
+                Assert.That(
+                    () => context.Execute(commandNoResult),
+                    Throws.Exception.TypeOf<HexagonException>().With.Message.ContainsSubstring("appropriate handler"));
+                Assert.That(
+                    () => context.Execute(commandWithResult),
+                    Throws.Exception.TypeOf<HexagonException>().With.Message.ContainsSubstring("appropriate handler"));
+            }
+        }
+
+        [Test]
+        public void Execute_ShouldExecuteARealCommandHandler_WithNoResult()
+        {
+            var command = new CommandNoResult();
+            this.factoryMock.Setup(
+                x =>
+                x.Get<IDbContextDatabaseCommandHandler>(
+                    typeof(IDbContextDatabaseCommandHandler<CommandNoResult>)))
+                .Returns(new CommandNoResultHandler());
+
+            using (var context = this.CreateContext())
+            {
+                context.Start();
+
+                Assert.That(() => context.Execute(command), Throws.Nothing);
+            }
+        }
+
+        [Test]
+        public void Execute_ShouldExecuteARealCommandHandler_WithResult()
+        {
+            var command = new CommandWithResult();
+            this.factoryMock.Setup(
+                x =>
+                x.Get<IDbContextDatabaseCommandHandler>(
+                    typeof(IDbContextDatabaseCommandHandler<CommandWithResult>)))
+                .Returns(new CommandWithResultHandler());
+
+            using (var context = this.CreateContext())
+            {
+                context.Start();
+
+                var result = context.Execute(command);
+
+                Assert.That(result, Is.AtLeast(DateTime.Now.AddYears(-1)));
             }
         }
 

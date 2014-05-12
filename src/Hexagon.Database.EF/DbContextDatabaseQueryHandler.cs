@@ -24,7 +24,7 @@ namespace Hexagon.Database.EF
         where TDatabaseQuery : IDatabaseQuery<TResult>
     {
         /// <inheritdoc />
-        public object Handle(IDatabaseQuery query, DbContext context)
+        object IDbContextDatabaseQueryHandler.Handle(IDatabaseQuery query, DbContext context)
         {
             Guard.AgainstNull(() => query, query);
             Guard.AgainstNull(() => context, context);
