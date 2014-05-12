@@ -10,11 +10,10 @@
 
 namespace Hexagon.Database.EF
 {
+    using System;
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
-
-    using Hexagon.Messages;
 
     /// <summary>
     /// <see cref="IDatabaseQueryParametrizedResult{T}"/> implementation based on
@@ -44,28 +43,21 @@ namespace Hexagon.Database.EF
         }
 
         /// <inheritdoc />
+        public IDatabaseQueryOrderedParametrizedResult<T> OrderBy<TKey>(Func<T, TKey> selector)
+        {
+            return new DbSetOrderedParametrizedResult<T>(this.set.OrderBy(selector));
+        }
+
+        /// <inheritdoc />
+        public IDatabaseQueryOrderedParametrizedResult<T> OrderByDescending<TKey>(Func<T, TKey> selector)
+        {
+            return new DbSetOrderedParametrizedResult<T>(this.set.OrderByDescending(selector));
+        }
+
+        /// <inheritdoc />
         public IEnumerable<T> List()
         {
             return this.set.ToList();
-        }
-
-        /// <inheritdoc />
-        public IPaginationResults<T> Paginate(IPaginationParameters paginationParameters)
-        {
-            return this.Paginate(paginationParameters.CurrentPage, paginationParameters.PerPage);
-        }
-
-        /// <inheritdoc />
-        public IPaginationResults<T> Paginate(int page = 1, int perPage = 30)
-        {
-            var count = this.set.Count();
-            return new PaginationResult<T>
-                       {
-                           CurrentPage = page,
-                           PerPage = perPage,
-                           TotalEntries = count,
-                           Items = this.set.Skip((page - 1) * perPage).Take(perPage)
-                       };
         }
 
         /// <inheritdoc />

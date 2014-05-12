@@ -151,6 +151,9 @@ namespace Hexagon.Database.EF
             Guard.AgainstNull(() => query, query);
             this.ThrowIfNotActive("Execute query");
 
+            // Flush pending changes, but since we manage the transaction it is still transactionnal.
+            this.SaveChanges();
+
             var handlerType = typeof(IDbContextDatabaseQueryHandler<,>).MakeGenericType(
                 query.GetType(),
                 typeof(TResult));
@@ -185,6 +188,10 @@ namespace Hexagon.Database.EF
         {
             Guard.AgainstNull(() => command, command);
             this.ThrowIfNotActive("Execute command");
+
+            // Flush pending changes, but since we manage the transaction it is still transactionnal.
+            this.SaveChanges();
+
             throw new System.NotImplementedException();
         }
 
@@ -193,6 +200,10 @@ namespace Hexagon.Database.EF
         {
             Guard.AgainstNull(() => command, command);
             this.ThrowIfNotActive("Execute command");
+            
+            // Flush pending changes, but since we manage the transaction it is still transactionnal.
+            this.SaveChanges();
+
             throw new System.NotImplementedException();
         }
 

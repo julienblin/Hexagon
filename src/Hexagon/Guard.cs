@@ -62,7 +62,7 @@ namespace Hexagon
         /// Throws <see cref="ArgumentException"/> otherwise.
         /// </summary>
         /// <param name="reference">
-        /// The reference.
+        /// The reference function for argument name.
         /// </param>
         /// <param name="value">
         /// The value.
@@ -74,7 +74,32 @@ namespace Hexagon
         {
             if (!(value is T))
             {
-                throw new ArgumentException(string.Format("Parameter must be a {0}.", typeof(T)), GetParameterName(reference));
+                throw new ArgumentException(string.Format("Parameter must be a {0}. Actual: {1}", typeof(T), value.GetType()), GetParameterName(reference));
+            }
+        }
+
+        /// <summary>
+        /// Ensures the given <paramref name="value"/> is more than <paramref name="minValue"/>.
+        /// Throws <see cref="ArgumentException"/> otherwise.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the argument.
+        /// </typeparam>
+        /// <param name="reference">
+        /// The reference function for argument name.
+        /// </param>
+        /// <param name="value">
+        /// The value to compare.
+        /// </param>
+        /// <param name="minValue">
+        /// The minimal value to compare to.
+        /// </param>
+        public static void AgainstMinimalValue<T>(Expression<Func<T>> reference, T value, T minValue)
+            where T : IComparable<T>
+        {
+            if (value.CompareTo(minValue) < 0)
+            {
+                throw new ArgumentException(string.Format("Parameter must be more than {0}. Actual: {1}.", minValue, value), GetParameterName(reference));
             }
         }
 

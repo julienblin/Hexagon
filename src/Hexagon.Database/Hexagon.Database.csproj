@@ -54,6 +54,7 @@
     </Compile>
     <Compile Include="IDatabaseCommand.cs" />
     <Compile Include="IDatabaseQuery.cs" />
+    <Compile Include="IDatabaseQueryOrderedParametrizedResult.cs" />
     <Compile Include="IDatabaseQueryParametrizedResult.cs" />
     <Compile Include="IDatabaseRepository.cs" />
     <Compile Include="IParametrizedDatabaseQuery.cs" />
