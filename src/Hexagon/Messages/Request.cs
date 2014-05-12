@@ -21,7 +21,7 @@ namespace Hexagon.Messages
         where TResponse : IResponse
     {
         /// <inheritdoc />
-        public virtual Type ResponseType
+        Type IRequest.ResponseType
         {
             get
             {
