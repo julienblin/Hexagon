@@ -59,6 +59,8 @@
     <Compile Include="IClock.cs" />
     <Compile Include="Impl\DataAnnotationValidationInterceptor.cs" />
     <Compile Include="DefaultInterceptionPrority.cs" />
+    <Compile Include="Impl\SetCurrentCultureFromContextInterceptor.cs" />
+    <Compile Include="Impl\SetCurrentCultureInContextInterceptor.cs" />
     <Compile Include="IRequestHandler.cs" />
     <Compile Include="IRequestProcessorInterceptor.cs" />
     <Compile Include="IRequestProcessorInvocation.cs" />
