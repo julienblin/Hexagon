@@ -55,6 +55,12 @@ namespace Hexagon.Database.EF
         }
 
         /// <inheritdoc />
+        public T FirstOrDefault()
+        {
+            return this.set.FirstOrDefault();
+        }
+
+        /// <inheritdoc />
         public IEnumerable<T> List()
         {
             return this.set.ToList();

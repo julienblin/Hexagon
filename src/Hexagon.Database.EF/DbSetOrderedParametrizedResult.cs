@@ -80,6 +80,12 @@ namespace Hexagon.Database.EF
         }
 
         /// <inheritdoc />
+        public T FirstOrDefault()
+        {
+            return this.orderedSet.FirstOrDefault();
+        }
+
+        /// <inheritdoc />
         public IEnumerable<T> List()
         {
             return this.orderedSet.ToList();

@@ -53,6 +53,14 @@ namespace Hexagon.Database
         IDatabaseQueryOrderedParametrizedResult<T> OrderByDescending<TKey>(Func<T, TKey> selector);
 
         /// <summary>
+        /// Returns the first item, or the default value there is no item.
+        /// </summary>
+        /// <returns>
+        /// The first item, or default if not found.
+        /// </returns>
+        T FirstOrDefault();
+
+        /// <summary>
         /// Returns all the results.
         /// </summary>
         /// <returns>

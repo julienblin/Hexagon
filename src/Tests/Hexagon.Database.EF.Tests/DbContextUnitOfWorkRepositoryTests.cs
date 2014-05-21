@@ -111,6 +111,27 @@ namespace Hexagon.Database.EF.Tests
         }
 
         [Test]
+        public void Execute_ShouldExecuteARealQueryHandler_UsingFirstOrDefault()
+        {
+            var query = new Entity1Query { ValueLike = "Something" };
+            this.factoryMock.Setup(
+                x =>
+                x.Get<IDbContextDatabaseQueryHandler>(
+                    typeof(IDbContextDatabaseQueryHandler<Entity1Query, IDatabaseQueryParametrizedResult<Entity1>>)))
+                .Returns(new Entity1QueryHandler());
+
+            using (var context = this.CreateContext())
+            {
+                context.Start();
+                context.Add(new Entity1 { Value = "Something Good" });
+
+                var result = context.Execute(query).FirstOrDefault();
+
+                Assert.That(() => result.Value, Is.EqualTo("Something Good"));
+            }
+        }
+
+        [Test]
         public void Execute_ShouldExecuteARealQueryHandler_UsingList()
         {
             var query = new Entity1Query { ValueLike = "Something" };
